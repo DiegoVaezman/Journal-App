@@ -17,7 +17,7 @@ export const useCheckAuth = () => {
                 login({
                     uid: uid!,
                     email: email!,
-                    photoURL: photoURL!,
+                    photoUrl: photoURL!,
                     displayName: displayName!,
                 })
             );
