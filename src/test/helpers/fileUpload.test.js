@@ -1,11 +1,14 @@
 import { fileUpload } from '../../helpers/fileUpload';
 import { v2 as cloudinary } from 'cloudinary';
+require('dotenv').config({
+    path: '.env.test',
+});
 
-//en la parte de testing podemos usar las keys de cloudinary porque no se compilan en la app y no se expondrán.
+//en la parte de testing podemos usar las keys de cloudinary porque no se compilan en la app y no se expondrán. Pero al subirlo a github si...
 cloudinary.config({
     cloud_name: 'cloudy-vaezman',
-    api_key: '677752268855965',
-    api_secret: 'WzVa1A47mDj0bHp3Le_ePCvmMS0',
+    api_key: process.env.VITE_CLOUDINARY_API_KEY,
+    api_secret: process.env.VITE_CLOUDINARY_API_SECRET,
     secure: true,
 });
 
@@ -17,6 +20,7 @@ describe('Testing fileUpload', () => {
         const blob = await res.blob();
         const file = new File([blob], 'foto');
         const url = await fileUpload(file);
+        console.log(url);
         expect(typeof url).toBe('string');
 
         //eliminar foto de cloudinary después del test
@@ -28,6 +32,7 @@ describe('Testing fileUpload', () => {
     });
 
     test('should return error', async () => {
+        //Hace un console.log del error por eso aparece en la consola Unexpected error uploading image
         try {
             const file = new File([], 'foto');
             const url = await fileUpload(file);
